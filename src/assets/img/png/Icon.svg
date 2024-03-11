@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="191mm"
+   height="191mm"
+   viewBox="0 0 676.77166 676.77165"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Icon.svg"
+   inkscape:export-filename="/home/bhinkson/android/houseRulesChess/www/img/logo.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="601.73232"
+     inkscape:cy="223.31884"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="10"
+     fit-margin-left="10"
+     fit-margin-right="10"
+     fit-margin-bottom="10"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="1920"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-207.42408,-191.02362)">
+    <circle
+       style="opacity:1;fill:#0064c8;fill-opacity:1"
+       id="path3385"
+       cx="548.13837"
+       cy="531.36664"
+       r="336.42859" />
+    <g
+       id="g3376"
+       transform="matrix(0.5683962,0,0,0.5683962,240.7918,200.45351)"
+       style="fill:#ffffff">
+      <rect
+         y="736.64789"
+         x="395.71429"
+         height="88.571426"
+         width="315.71429"
+         id="rect4144"
+         style="fill:#ffffff;fill-opacity:1" />
+      <ellipse
+         ry="237.85715"
+         rx="100.71429"
+         cy="578.79077"
+         cx="550.71423"
+         id="path4146"
+         style="fill:#ffffff;fill-opacity:1" />
+      <rect
+         y="219.50507"
+         x="545.71423"
+         height="130"
+         width="11.428572"
+         id="rect4148"
+         style="fill:#ffffff;fill-opacity:1" />
+      <rect
+         y="266.64792"
+         x="491.42859"
+         height="8.5714283"
+         width="117.14286"
+         id="rect4150"
+         style="fill:#ffffff;fill-opacity:1" />
+      <rect
+         y="616.64789"
+         x="451.78571"
+         height="172.85715"
+         width="197.14287"
+         id="rect4152"
+         style="fill:#ffffff;fill-opacity:1" />
+    </g>
+  </g>
+</svg>
