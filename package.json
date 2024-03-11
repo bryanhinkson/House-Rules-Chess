@@ -13,8 +13,10 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@capacitor/android": "^5.7.2",
     "@capacitor/cli": "^5.7.2",
     "@capacitor/core": "^5.7.2",
+    "@capacitor/ios": "^5.7.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
