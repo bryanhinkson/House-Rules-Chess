@@ -4,6 +4,6 @@
 
 <template>
   <main>
-    You are homne
+    You are home
   </main>
 </template>
