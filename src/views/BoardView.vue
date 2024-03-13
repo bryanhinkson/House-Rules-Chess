@@ -30,13 +30,14 @@
     <hr>
 
     <div class="row">
-      <button class="btn btn-lg btn-warning col-xs-2 boardButton" @click="undo()">Undo</button>
-      <button class="btn btn-lg btn-primary col-xs-4 col-xs-offset-1 boardButton" @click="togglePiecePallet()">
+      <button class="btn btn-lg btn-warning col-xs-2 boardButton undo" @click="undo()">Undo</button>
+      <button class="btn btn-lg btn-primary col-xs-4 col-xs-offset-1 boardButton piece-pallet"
+        @click="togglePiecePallet()">
         Piece Pallet</button>
-      <button class="btn btn-lg btn-success col-xs-4 col-xs-offset-1 boardButton" v-show="showStart && !gameStarted"
-        @click="resetGame(false); toggleStart()">Start Game</button>
+      <button class="btn btn-lg btn-success col-xs-4 col-xs-offset-1 boardButton start-game"
+        v-show="showStart && !gameStarted" @click="resetGame(false); toggleStart()">Start Game</button>
 
-      <button v-show="!showStart" id="gameMenu" class="btn btn-lg btn-default col-xs-4 col-xs-offset-1 boardButton"
+      <button v-show="!showStart" id="gameMenu" class="btn btn-lg btn-default col-xs-4 col-xs-offset-1 boardButton menu"
         @click="toggleGameMenu($event)">
         Menu
         <i class="fa fa-bars" aria-hidden="true"></i>
@@ -46,20 +47,20 @@
     <div v-show="showGameMenu">
       <div class="row">
         <hr>
-        <button class="btn btn-sm btn-success col-xs-3 boardButton" @click="saveCurrentConfig()">Save
-          Board</button>
+        <button class="btn btn-sm btn-success col-xs-3 boardButton save" @click="saveCurrentConfig()">
+          Save Board</button>
 
         <select class="col-xs-3 col-xs-offset-1 dropdown" v-model="LoadThisBoardConfig">
           <option v-for="(config, i) of savedConfigs" :key="i" :value="config">{{ config.name }}</option>
         </select>
-        <button class="btn btn-sm btn-warning col-xs-2 boardButton" @click="loadBoardConfig();">Load</button>
+        <button class="btn btn-sm btn-warning col-xs-2 boardButton load" @click="loadBoardConfig();">Load</button>
 
-        <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton" v-show="gameStarted"
+        <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton reset" v-show="gameStarted"
           @click="resetGame();">Reset</button>
       </div>
       <br>
       <div class="row">
-        <button class="btn btn-sm btn-primary col-xs-3 boardButton" @click="rotateBoard()">Rotate Board</button>
+        <button class="btn btn-sm btn-primary col-xs-3 boardButton rotate-board" @click="rotateBoard()">Rotate Board</button>
       </div>
     </div>
 
@@ -90,8 +91,8 @@ import { ref, type Ref } from 'vue';
 
 const gameStarted = ref(false);
 const LoadThisBoardConfig = ref();
-const ranks = ref([1, 2, 3, 4, 5, 6, 7, 8]);
-const files = ref(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']);
+const ranks = ref([1, 2, 3, 4, 5, 6, 7, 8]); // Columns
+const files = ref(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']); // Row
 const boardRotated = ref(false);
 const newLocation = ref();
 
@@ -199,7 +200,7 @@ function saveCurrentConfig() {
 }
 
 function loadBoardConfig() {
-  var config = JSON.parse(LoadThisBoardConfig.value);
+  var config = LoadThisBoardConfig.value;
   if (confirm("Are you sure you want to load the following Board Configuration: " + config.name)) {
     populateJsonBoard(config.config);
   }
@@ -309,13 +310,11 @@ function undo() {
   if (moveStack.value.length == 0) {
     return;
   }
-  // Get the last move
   var move = moveStack.value.pop();
 
-  // Put the Pieces back
-  move.newLocation.value.removeChild(move.movedPiece);
+  move.newLocation.removeChild(move.movedPiece);
   if (move.capturedPiece != null) {
-    move.newLocation.value.appendChild(move.capturedPiece);
+    move.newLocation.appendChild(move.capturedPiece);
   }
   move.oldLocation.appendChild(move.movedPiece);
 
@@ -346,15 +345,14 @@ function clearBoard() {
 }
 
 function makeBoardJson() {
-  let boardConfig: any = {}; // TODO: type this
-
+  boardConfig.value = blankBoardConfig;
   for (var i = 1; i <= 8; i++) {
     for (var j = 0; j < 8; j++) {
       if (document.getElementsByClassName(files.value[j] + i)[0].innerHTML && !boardRotated.value) {
-        boardConfig[files.value[j] + i] = (document.getElementsByClassName(files.value[j] + i)[0] as any).firstChild.getAttribute('type');
+        (boardConfig.value as any)[files.value[j] + i] = (document.getElementsByClassName(files.value[j] + i)[0] as any).firstChild.getAttribute('type');
       }
       else if (document.getElementsByClassName(files.value[j] + i)[1].innerHTML && boardRotated) {
-        boardConfig[files.value[j] + i] = (document.getElementsByClassName(files.value[j] + i)[1] as any).firstChild.getAttribute('type');
+        (boardConfig.value as any)[files.value[j] + i] = (document.getElementsByClassName(files.value[j] + i)[1] as any).firstChild.getAttribute('type');
       }
     }
   }
@@ -364,8 +362,10 @@ function populateJsonBoard(bc = boardConfig.value) {
   clearBoard();
   for (var square in bc) {
     var pieceType = (bc as any)[square];
-    document.getElementsByClassName(square)[0].innerHTML = '<img type="' + pieceType + '" class="chessPiece" src="' + (pieceMap.value as any)[pieceType] + '">';
-    document.getElementsByClassName(square)[1].innerHTML = '<img type="' + pieceType + '" class="chessPiece" src="' + (pieceMap.value as any)[pieceType] + '">';
+    if (pieceType) {
+      document.getElementsByClassName(square)[0].innerHTML = '<img type="' + pieceType + '" class="chessPiece" src="' + (pieceMap.value as any)[pieceType] + '">';
+      document.getElementsByClassName(square)[1].innerHTML = '<img type="' + pieceType + '" class="chessPiece" src="' + (pieceMap.value as any)[pieceType] + '">';
+    }
   }
 }
 
@@ -382,45 +382,21 @@ function resetBoard() {
 
 </script>
 
-<style scoped>
-* {
-  background-color: #121212;
-  color: white;
-}
 
 
-/* Elements */
+
+<style>
 .chess-board {
   display: block;
   width: 100vw;
 }
 
-img {
-  width: 100%;
-}
-
-/* body {
-  height: 100vh;
-  background-color: #121212;
-  color: white;
-} */
-
-
-/* nav * {
-  background-color: lightgray;
-  color: black;
-  font-size: 1.25em;
-  padding: 5px
-} */
-
 .chessPiece {
   position: relative;
   z-index: 2;
   background-color: inherit;
-  height: 90%;
-  width: 90%;
-  margin-top: 5%;
-  margin-left: 5%;
+  height: 100%;
+  width: 100%;
 }
 
 .piecePalletCell {
@@ -441,15 +417,58 @@ img {
 
 .palletContainer {
   margin-left: 12.5vw;
+  margin-right: 12.5vw;
 }
 
 .boardButton {
-  padding: 10px 0px;
+  padding: 10px 10px;
+  color: white;
+
+  &.undo {
+    background-color: hsl(0, 29%, 61%);
+    color: hsl(0, 41%, 15%);
+  }
+
+  &.piece-pallet {
+    background-color: hsl(239, 41%, 66%);
+    color: hsl(239, 41%, 15%);
+  }
+
+  &.start-game {
+    background-color: hsl(119, 41%, 66%);
+    color: hsl(119, 41%, 15%);
+  }
+
+  &.menu {
+    background-color: hsl(119, 41%, 66%);
+    color: hsl(119, 41%, 15%);
+  }
+
+  &.save {
+    background-color: hsl(119, 41%, 66%);
+    color: hsl(119, 41%, 15%);
+  }
+
+  &.load {
+    background-color: hsl(119, 41%, 66%);
+    color: hsl(119, 41%, 15%);
+  }
+
+  &.reset {
+    background-color: hsl(119, 41%, 66%);
+    color: hsl(119, 41%, 15%);
+  }
+  
+  &.rotate-board {
+    background-color: hsl(119, 41%, 66%);
+    color: hsl(119, 41%, 15%);
+  }
+
+
 }
 
 .dropdown {
   background-color: #e8eaed;
-  /* Light gray*/
   height: 40px;
   min-width: 100px;
   color: black;
