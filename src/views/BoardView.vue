@@ -46,6 +46,9 @@
         <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton reset" v-show="gameStarted"
           @click="resetGame();">Reset</button>
       </div>
+
+      <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton" v-show="gameStarted"
+          @click="goToAboutPage();">About Page</button>
     </div>
 
     <hr>
@@ -71,7 +74,12 @@
 </template>
 
 <script setup lang="ts">
+import router from '@/router';
 import { ref, type Ref } from 'vue';
+
+function goToAboutPage() {
+  router.replace({ path: '/about' })
+}
 
 const gameStarted = ref(false);
 const LoadThisBoardConfig = ref();
@@ -387,7 +395,7 @@ function resetBoard() {
 
 .boardButton {
   padding: 10px 10px;
-  color: white;
+  color: black;
 
   &.undo {
     background-color: hsl(0, 29%, 61%);
