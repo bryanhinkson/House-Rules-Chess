@@ -1,24 +1,12 @@
 <template>
   <div class="chess-board">
-    <div id="whiteFacingBoard" class="board" v-show="!boardRotated">
+    <div id="whiteFacingBoard" class="board">
       <div v-for="(rank, rankIndex) of ranks" :key="rankIndex">
         <div class="row" :class="rank">
           <div v-for="(file, fileIndex) of files" :key="file">
             <div @click="select($event)"
               :class="((fileIndex + rankIndex) % 2 == 0) ? ('white ' + file + '' + (8 - rankIndex)) : ('black ' + file + '' + (8 - rankIndex))">
               <!-- TODO: refactor this into a function -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="blackFacingBoard" class="board" v-show="boardRotated">
-      <div v-for="(rank, rankIndex) of ranks" :key="rankIndex">
-        <div class="row" :class="rank">
-          <div v-for="(file, fileIndex) of files" :key="fileIndex">
-            <div @click="select($event);"
-              :class="((fileIndex + rankIndex) % 2 == 0) ? ('white ' + file + '' + (rankIndex + 1)) : ('black ' + file + '' + (1 + rankIndex))">
             </div>
           </div>
         </div>
@@ -58,10 +46,6 @@
         <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton reset" v-show="gameStarted"
           @click="resetGame();">Reset</button>
       </div>
-      <br>
-      <div class="row">
-        <button class="btn btn-sm btn-primary col-xs-3 boardButton rotate-board" @click="rotateBoard()">Rotate Board</button>
-      </div>
     </div>
 
     <hr>
@@ -93,7 +77,6 @@ const gameStarted = ref(false);
 const LoadThisBoardConfig = ref();
 const ranks = ref([1, 2, 3, 4, 5, 6, 7, 8]); // Columns
 const files = ref(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']); // Row
-const boardRotated = ref(false);
 const newLocation = ref();
 
 const whitePalletCells: Ref<{ type: string, image: string }[]> = ref([
@@ -331,15 +314,6 @@ function clearBoard() {
     document.getElementsByClassName('F' + i)[0].innerHTML = "";
     document.getElementsByClassName('G' + i)[0].innerHTML = "";
     document.getElementsByClassName('H' + i)[0].innerHTML = "";
-
-    document.getElementsByClassName('A' + i)[1].innerHTML = "";
-    document.getElementsByClassName('B' + i)[1].innerHTML = "";
-    document.getElementsByClassName('C' + i)[1].innerHTML = "";
-    document.getElementsByClassName('D' + i)[1].innerHTML = "";
-    document.getElementsByClassName('E' + i)[1].innerHTML = "";
-    document.getElementsByClassName('F' + i)[1].innerHTML = "";
-    document.getElementsByClassName('G' + i)[1].innerHTML = "";
-    document.getElementsByClassName('H' + i)[1].innerHTML = "";
   }
   boardConfig.value = blankBoardConfig;
 }
@@ -348,11 +322,8 @@ function makeBoardJson() {
   boardConfig.value = blankBoardConfig;
   for (var i = 1; i <= 8; i++) {
     for (var j = 0; j < 8; j++) {
-      if (document.getElementsByClassName(files.value[j] + i)[0].innerHTML && !boardRotated.value) {
+      if (document.getElementsByClassName(files.value[j] + i)[0].innerHTML) {
         (boardConfig.value as any)[files.value[j] + i] = (document.getElementsByClassName(files.value[j] + i)[0] as any).firstChild.getAttribute('type');
-      }
-      else if (document.getElementsByClassName(files.value[j] + i)[1].innerHTML && boardRotated) {
-        (boardConfig.value as any)[files.value[j] + i] = (document.getElementsByClassName(files.value[j] + i)[1] as any).firstChild.getAttribute('type');
       }
     }
   }
@@ -364,14 +335,8 @@ function populateJsonBoard(bc = boardConfig.value) {
     var pieceType = (bc as any)[square];
     if (pieceType) {
       document.getElementsByClassName(square)[0].innerHTML = '<img type="' + pieceType + '" class="chessPiece" src="' + (pieceMap.value as any)[pieceType] + '">';
-      document.getElementsByClassName(square)[1].innerHTML = '<img type="' + pieceType + '" class="chessPiece" src="' + (pieceMap.value as any)[pieceType] + '">';
     }
   }
-}
-
-function rotateBoard() {
-  boardRotated.value = !boardRotated.value;
-  populateJsonBoard(boardConfig.value);
 }
 
 function resetBoard() {
@@ -458,13 +423,6 @@ function resetBoard() {
     background-color: hsl(119, 41%, 66%);
     color: hsl(119, 41%, 15%);
   }
-  
-  &.rotate-board {
-    background-color: hsl(119, 41%, 66%);
-    color: hsl(119, 41%, 15%);
-  }
-
-
 }
 
 .dropdown {
