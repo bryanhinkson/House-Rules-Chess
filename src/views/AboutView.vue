@@ -25,7 +25,7 @@ export default defineComponent({
   },
   setup() {
     const src = ref(`
-# House Rules Chess
+# Digital Chessboard
 This is a digital representation of a chess board.  
 There are no rules attached to the game so you can move however you want.  This opens up a lot of doors to different variations of the game.
 This also allows you to augment the game of chess in anyway that you wish without the hassle of carrying a full board around.
@@ -40,7 +40,7 @@ Click the "Local Play" button and you will be brought to the game board.
 Play chess normally or with a twist it is up to you.
 
 # Saving / Loading Board Configurations  
-House Rules Chess has the ability to save custom configurations of the board and load them on demand.  
+Digital Chessboard has the ability to save custom configurations of the board and load them on demand.  
 
 ### _Saving_ -
 To save a board configuration start a game and then click the lower menu button (This is the button that takes the place of the "Start Game" button)

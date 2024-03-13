@@ -1,4 +1,4 @@
-package com.hinksonhosting.chess;
+package com.hinksonhosting.digitalchessboard;
 
 import com.getcapacitor.BridgeActivity;
 

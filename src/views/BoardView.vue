@@ -46,9 +46,6 @@
         <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton reset" v-show="gameStarted"
           @click="resetGame();">Reset</button>
       </div>
-
-      <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton" v-show="gameStarted"
-        @click="goToAboutPage();">About Page</button>
     </div>
 
     <hr>
@@ -71,11 +68,16 @@
       <hr>
     </div>
   </div>
+
+  <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton" v-show="gameStarted"
+    @click="goToAboutPage();">About Page</button>
 </template>
+
 
 <script setup lang="ts">
 import router from '@/router';
 import { ref, type Ref } from 'vue';
+// import 'src/assets/img/blackBishop.svg';
 
 function goToAboutPage() {
   router.replace({ path: '/about' })
@@ -87,21 +89,40 @@ const ranks = ref([1, 2, 3, 4, 5, 6, 7, 8]); // Columns
 const files = ref(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']); // Row
 const newLocation = ref();
 
+const baseImgPath = '/img';
+
 const whitePalletCells: Ref<{ type: string, image: string }[]> = ref([
-  { 'type': 'White-Pawn', 'image': '/src/assets/img/whitePawn.svg' },
-  { 'type': 'White-Rook', 'image': '/src/assets/img/whiteRook.svg' },
-  { 'type': 'White-Knight', 'image': '/src/assets/img/whiteKnight.svg' },
-  { 'type': 'White-Bishop', 'image': '/src/assets/img/whiteBishop.svg' },
-  { 'type': 'White-King', 'image': '/src/assets/img/whiteKing.svg' },
-  { 'type': 'White-Queen', 'image': '/src/assets/img/whiteQueen.svg' }]
+  { 'type': 'White-Pawn', 'image': `${baseImgPath}/whitePawn.svg` },
+  { 'type': 'White-Rook', 'image': `${baseImgPath}/whiteRook.svg` },
+  { 'type': 'White-Knight', 'image': `${baseImgPath}/whiteKnight.svg` },
+  { 'type': 'White-Bishop', 'image': `${baseImgPath}/whiteBishop.svg` },
+  { 'type': 'White-King', 'image': `${baseImgPath}/whiteKing.svg` },
+  { 'type': 'White-Queen', 'image': `${baseImgPath}/whiteQueen.svg` }]
 );
 const blackPalletCells: Ref<{ type: string, image: string }[]> = ref([
-  { 'type': 'Black-Pawn', 'image': '/src/assets/img/blackPawn.svg' },
-  { 'type': 'Black-Rook', 'image': '/src/assets/img/blackRook.svg' },
-  { 'type': 'Black-Knight', 'image': '/src/assets/img/blackKnight.svg' },
-  { 'type': 'Black-Bishop', 'image': '/src/assets/img/blackBishop.svg' },
-  { 'type': 'Black-King', 'image': '/src/assets/img/blackKing.svg' },
-  { 'type': 'Black-Queen', 'image': '/src/assets/img/blackQueen.svg' }]);
+  { 'type': 'Black-Pawn', 'image': `${baseImgPath}/blackPawn.svg` },
+  { 'type': 'Black-Rook', 'image': `${baseImgPath}/blackRook.svg` },
+  { 'type': 'Black-Knight', 'image': `${baseImgPath}/blackKnight.svg` },
+  { 'type': 'Black-Bishop', 'image': `${baseImgPath}/blackBishop.svg` },
+  { 'type': 'Black-King', 'image': `${baseImgPath}/blackKing.svg` },
+  { 'type': 'Black-Queen', 'image': `${baseImgPath}/blackQueen.svg` }]);
+
+// Map the piece types to there respective images
+const pieceMap = ref({
+  "White-Pawn": `${baseImgPath}/whitePawn.svg`,
+  "White-Knight": `${baseImgPath}/whiteKnight.svg`,
+  "White-Bishop": `${baseImgPath}/whiteBishop.svg`,
+  "White-Rook": `${baseImgPath}/whiteRook.svg`,
+  "White-King": `${baseImgPath}/whiteKing.svg`,
+  "White-Queen": `${baseImgPath}/whiteQueen.svg`,
+
+  "Black-Pawn": `${baseImgPath}/blackPawn.svg`,
+  "Black-Knight": `${baseImgPath}/blackKnight.svg`,
+  "Black-Bishop": `${baseImgPath}/blackBishop.svg`,
+  "Black-Rook": `${baseImgPath}/blackRook.svg`,
+  "Black-King": `${baseImgPath}/blackKing.svg`,
+  "Black-Queen": `${baseImgPath}/blackQueen.svg`
+});
 
 const moveStack: Ref<any[]> = ref([]); // TODO: type this
 const showStart = ref(true);
@@ -196,23 +217,6 @@ function loadBoardConfig() {
     populateJsonBoard(config.config);
   }
 }
-
-// Map the piece types to there respective images
-const pieceMap = ref({
-  "White-Pawn": "/src/assets/img/whitePawn.svg",
-  "White-Knight": "/src/assets/img/whiteKnight.svg",
-  "White-Bishop": "/src/assets/img/whiteBishop.svg",
-  "White-Rook": "/src/assets/img/whiteRook.svg",
-  "White-King": "/src/assets/img/whiteKing.svg",
-  "White-Queen": "/src/assets/img/whiteQueen.svg",
-
-  "Black-Pawn": "/src/assets/img/blackPawn.svg",
-  "Black-Knight": "/src/assets/img/blackKnight.svg",
-  "Black-Bishop": "/src/assets/img/blackBishop.svg",
-  "Black-Rook": "/src/assets/img/blackRook.svg",
-  "Black-King": "/src/assets/img/blackKing.svg",
-  "Black-Queen": "/src/assets/img/blackQueen.svg"
-});
 
 function resetGame(ask = true) {
   gameStarted.value = true;
