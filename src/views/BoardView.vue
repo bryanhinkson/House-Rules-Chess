@@ -48,7 +48,7 @@
       </div>
 
       <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton" v-show="gameStarted"
-          @click="goToAboutPage();">About Page</button>
+        @click="goToAboutPage();">About Page</button>
     </div>
 
     <hr>
@@ -446,6 +446,8 @@ function resetBoard() {
   width: 12vw;
   height: 12vw;
   float: left;
+  border-bottom: 1px solid hsl(25 76% 16% / 1);
+  box-shadow: inset 0px 4px 6px 0px hsl(25 76% 75% / 1);
 }
 
 .white:hover {
@@ -460,6 +462,8 @@ function resetBoard() {
   width: 12vw;
   height: 12vw;
   float: left;
+  border-bottom: 1px solid hsl(25 76% 16% / 1);
+  box-shadow: -1px 0px 20px -5px hsl(25 76% 20% / 1);
 }
 
 .black:hover {
