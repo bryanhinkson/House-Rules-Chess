@@ -3,6 +3,9 @@
     <a href="/">
       <button class="btn btn-sm btn-sucess col-xs-2  col-xs-offset-1 boardButton">Back to Board</button>
     </a>
+    <a href="https://www.termsfeed.com/live/59a74f01-f082-4c03-9cb1-edc43708c42c" target="_blank">Privacy Policy</a>
+    <br>
+    <br>
     <br>
     <i>Pieces Drawn By jurgenwesterhof (adapted from work of Cburnett) - <a class="external free"
         href="http://commons.wikimedia.org/wiki/Template:SVG_chess_pieces">http://commons.wikimedia.org/wiki/Template:SVG_chess_pieces</a>,
