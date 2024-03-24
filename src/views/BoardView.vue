@@ -243,6 +243,7 @@ function select(e: any) {
     else if (e.target.tagName == "IMG") {
       if (e.target == selectedPiece.value) {
         selectedPiece.value = null;
+        clearSelection();
         return;
       }
       newLocation.value = e.target.parentNode;
@@ -254,6 +255,7 @@ function select(e: any) {
   if (e.target.children.length == 0) {
     if (e.target.tagName == "IMG") {
       selectedPiece.value = e.target;
+      e.target.className = e.target.className + ' selected';
     }
     else {
       selectedPiece.value = null;
@@ -264,9 +266,17 @@ function select(e: any) {
       selectedPiece.value = e.target.firstChild;
     }
     else {
+      clearSelection();
       selectedPiece.value = null;
     }
   }
+}
+
+function clearSelection(){
+  const elements = document.getElementsByClassName('selected');
+    for(const e of elements){
+      e.classList.remove('selected');
+    }
 }
 
 function move(oldLocation: any) {
@@ -355,6 +365,7 @@ function resetBoard() {
   selectedPiece.value = null;
   resetPiecePallet();
   makeBoardJson();
+  clearSelection();
 }
 
 </script>
@@ -475,5 +486,9 @@ function resetBoard() {
   width: 12vw;
   height: 12vw;
   float: left;
+}
+
+.selected {
+  background-color: hsl(195 53% 42% / 1);
 }
 </style>
