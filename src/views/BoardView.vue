@@ -1,6 +1,6 @@
 <template>
   <div class="chess-board">
-    <div id="whiteFacingBoard" class="board">
+    <div class="board">
       <div v-for="(rank, rankIndex) of ranks" :key="rankIndex">
         <div class="row" :class="rank">
           <div v-for="(file, fileIndex) of files" :key="file">
@@ -19,36 +19,16 @@
 
     <div class="row">
       <button class="btn btn-lg btn-warning col-xs-2 boardButton undo" @click="undo()">Undo</button>
-      <button class="btn btn-lg btn-primary col-xs-4 col-xs-offset-1 boardButton piece-pallet"
-        @click="togglePiecePallet()">
-        Piece Pallet</button>
       <button class="btn btn-lg btn-success col-xs-4 col-xs-offset-1 boardButton start-game"
         v-show="showStart && !gameStarted" @click="resetGame(false); toggleStart()">Start Game</button>
 
-      <button v-show="!showStart" id="gameMenu" class="btn btn-lg btn-default col-xs-4 col-xs-offset-1 boardButton menu"
+
+      <button id="gameMenu" class="btn btn-lg btn-default col-xs-4 col-xs-offset-1 boardButton menu"
         @click="toggleGameMenu($event)">
-        Menu
+        {{ showGameMenu ? 'Hide Menu' : 'Show Menu' }}
         <i class="fa fa-bars" aria-hidden="true"></i>
       </button>
     </div>
-
-    <div v-show="showGameMenu">
-      <div class="row">
-        <hr>
-        <button class="btn btn-sm btn-success col-xs-3 boardButton save" @click="saveCurrentConfig()">
-          Save Board</button>
-
-        <select class="col-xs-3 col-xs-offset-1 dropdown" v-model="LoadThisBoardConfig">
-          <option v-for="(config, i) of savedConfigs" :key="i" :value="config">{{ config.name }}</option>
-        </select>
-        <button class="btn btn-sm btn-warning col-xs-2 boardButton load" @click="loadBoardConfig();">Load</button>
-
-        <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton reset" v-show="gameStarted"
-          @click="resetGame();">Reset</button>
-      </div>
-    </div>
-
-    <hr>
 
     <div v-show="showPiecePallet">
       <div class="palletContainer">
@@ -67,10 +47,35 @@
       </div>
       <hr>
     </div>
-  </div>
 
-  <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton" v-show="gameStarted"
-    @click="goToAboutPage();">About Page</button>
+    <div v-show="showGameMenu">
+      <div class="row">
+        <hr>
+        <button class="btn btn-lg btn-primary col-xs-4 col-xs-offset-1 boardButton piece-pallet"
+          @click="togglePiecePallet()">
+          {{ showPiecePallet ? 'Hide Piece Pallet' : 'Show Piece Pallet' }}</button>
+      </div>
+      <div class="row">
+        <button class="btn btn-sm btn-success col-xs-3 boardButton save" @click="saveCurrentConfig()">
+          Save Board</button>
+
+        <select class="col-xs-3 col-xs-offset-1 dropdown" v-model="LoadThisBoardConfig">
+          <option value="" disabled selected>Select Config</option>
+          <option v-for="(config, i) of savedConfigs" :key="i" :value="config">{{ config.name }}</option>
+        </select>
+
+        <button class="btn btn-sm btn-warning col-xs-2 boardButton load" @click="loadBoardConfig();">Load</button>
+
+        <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton reset" v-show="gameStarted"
+          @click="resetGame();">Reset Board</button>
+      </div>
+      <button class="btn btn-sm col-xs-2  col-xs-offset-1 boardButton" @click="goToAboutPage();">About Page</button>
+    </div>
+
+    <hr>
+
+
+  </div>
 </template>
 
 
@@ -198,6 +203,9 @@ else {
 }
 function saveCurrentConfig() {
   var name = prompt("What would you like to call this board Configuration?");
+  if (!name) {
+    return;
+  }
   var savedBoards = [];
   if (window.localStorage.savedBoardConfig != null) {
     savedBoards = JSON.parse(window.localStorage.savedBoardConfig);
@@ -213,6 +221,9 @@ function saveCurrentConfig() {
 
 function loadBoardConfig() {
   var config = LoadThisBoardConfig.value;
+  if (!config || !config.name) {
+    return;
+  }
   if (confirm("Are you sure you want to load the following Board Configuration: " + config.name)) {
     populateJsonBoard(config.config);
   }
@@ -272,11 +283,11 @@ function select(e: any) {
   }
 }
 
-function clearSelection(){
+function clearSelection() {
   const elements = document.getElementsByClassName('selected');
-    for(const e of elements){
-      e.classList.remove('selected');
-    }
+  for (const e of elements) {
+    e.classList.remove('selected');
+  }
 }
 
 function move(oldLocation: any) {
@@ -341,6 +352,9 @@ function clearBoard() {
 }
 
 function makeBoardJson() {
+  if (!gameStarted.value) {
+    return;
+  }
   boardConfig.value = blankBoardConfig;
   for (var i = 1; i <= 8; i++) {
     for (var j = 0; j < 8; j++) {
@@ -404,62 +418,67 @@ function resetBoard() {
 }
 
 .palletContainer {
-  margin-left: 12.5vw;
-  margin-right: 12.5vw;
+  min-height: 25vw;
+  margin: 10px 12vw;
 }
 
 .boardButton {
-  padding: 10px 10px;
-  color: black;
+  padding: 15px 10px;
+  border-radius: 15px;
+  margin: 5px;
+  font-size: 1.25rem;
+  font-weight: bold;
 
   &.undo {
-    background-color: hsl(0, 29%, 61%);
-    color: hsl(0, 41%, 15%);
+    /* background-color: hsl(0, 29%, 85%);
+    color: hsl(0, 41%, 20%); */
   }
 
   &.piece-pallet {
-    background-color: hsl(239, 41%, 66%);
-    color: hsl(239, 41%, 15%);
+    background-color: hsl(239, 41%, 85%);
+    color: hsl(239, 41%, 20%);
   }
 
   &.start-game {
-    background-color: hsl(119, 41%, 66%);
-    color: hsl(119, 41%, 15%);
+    background-color: hsl(119, 41%, 85%);
+    color: hsl(119, 41%, 20%);
   }
 
   &.menu {
-    background-color: hsl(119, 41%, 66%);
-    color: hsl(119, 41%, 15%);
+    /* background-color: hsl(119, 41%, 85%);
+    color: hsl(119, 41%, 20%); */
   }
 
   &.save {
-    background-color: hsl(119, 41%, 66%);
-    color: hsl(119, 41%, 15%);
+    background-color: hsl(119, 41%, 85%);
+    color: hsl(119, 41%, 20%);
   }
 
   &.load {
-    background-color: hsl(119, 41%, 66%);
-    color: hsl(119, 41%, 15%);
+    /* background-color: hsl(119, 41%, 85%);
+    color: hsl(119, 41%, 20%); */
   }
 
   &.reset {
-    background-color: hsl(119, 41%, 66%);
-    color: hsl(119, 41%, 15%);
+    background-color: hsl(0, 29%, 85%);
+    color: hsl(0, 41%, 20%);
   }
 }
 
 .dropdown {
   background-color: #e8eaed;
-  height: 40px;
+  height: 50px;
   min-width: 100px;
-  color: black;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 1.25rem;
 }
 
 .white {
   background-color: white;
   color: black;
-  width: 12vw;
-  height: 12vw;
+  width: 12.5vw;
+  height: 12.5vw;
   float: left;
   border-bottom: 1px solid hsl(25 76% 16% / 1);
   box-shadow: inset 0px 4px 6px 0px hsl(25 76% 75% / 1);
@@ -467,15 +486,15 @@ function resetBoard() {
 
 .white:hover {
   background-color: lightblue;
-  width: 12vw;
-  height: 12vw;
+  width: 12.5vw;
+  height: 12.5vw;
   float: left;
 }
 
 .black {
   background-color: saddlebrown;
-  width: 12vw;
-  height: 12vw;
+  width: 12.5vw;
+  height: 12.5vw;
   float: left;
   border-bottom: 1px solid hsl(25 76% 16% / 1);
   box-shadow: -1px 0px 20px -5px hsl(25 76% 20% / 1);
@@ -483,8 +502,8 @@ function resetBoard() {
 
 .black:hover {
   background-color: lightblue;
-  width: 12vw;
-  height: 12vw;
+  width: 12.5vw;
+  height: 12.5vw;
   float: left;
 }
 
