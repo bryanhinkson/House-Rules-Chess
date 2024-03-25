@@ -391,6 +391,7 @@ function resetBoard() {
 .chess-board {
   display: block;
   width: 100vw;
+  margin-top: 60px;
 }
 
 .chessPiece {
