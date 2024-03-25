@@ -431,6 +431,7 @@ function resetBoard() {
   font-weight: bold;
 
   &.undo {
+    color: black;
     /* background-color: hsl(0, 29%, 85%);
     color: hsl(0, 41%, 20%); */
   }
@@ -446,6 +447,7 @@ function resetBoard() {
   }
 
   &.menu {
+    color: black;
     /* background-color: hsl(119, 41%, 85%);
     color: hsl(119, 41%, 20%); */
   }
@@ -456,6 +458,7 @@ function resetBoard() {
   }
 
   &.load {
+    color: black;
     /* background-color: hsl(119, 41%, 85%);
     color: hsl(119, 41%, 20%); */
   }
