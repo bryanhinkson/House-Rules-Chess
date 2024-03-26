@@ -6,7 +6,6 @@
           <div v-for="(file, fileIndex) of files" :key="file">
             <div @click="select($event)"
               :class="((fileIndex + rankIndex) % 2 == 0) ? ('white ' + file + '' + (8 - rankIndex)) : ('black ' + file + '' + (8 - rankIndex))">
-              <!-- TODO: refactor this into a function -->
             </div>
           </div>
         </div>
@@ -65,6 +64,8 @@
         </select>
 
         <button class="btn btn-sm btn-warning col-xs-2 boardButton load" @click="loadBoardConfig();">Load</button>
+        <button class="btn btn-sm btn-warning col-xs-2 boardButton delete" :disabled="!LoadThisBoardConfig"
+          @click="deleteBoardConfig();">Delete</button>
 
         <button class="btn btn-sm btn-danger col-xs-2  col-xs-offset-1 boardButton reset" v-show="gameStarted"
           @click="resetGame();">Reset Board</button>
@@ -81,15 +82,10 @@
 
 <script setup lang="ts">
 import router from '@/router';
-import { ref, type Ref } from 'vue';
-// import 'src/assets/img/blackBishop.svg';
-
-function goToAboutPage() {
-  router.replace({ path: '/about' })
-}
+import { onMounted, ref, type Ref } from 'vue';
 
 const gameStarted = ref(false);
-const LoadThisBoardConfig = ref();
+const LoadThisBoardConfig: Ref<BoardConfigType> = ref({} as BoardConfigType);
 const ranks = ref([1, 2, 3, 4, 5, 6, 7, 8]); // Columns
 const files = ref(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']); // Row
 const newLocation = ref();
@@ -133,16 +129,32 @@ const moveStack: Ref<any[]> = ref([]); // TODO: type this
 const showStart = ref(true);
 let showPiecePallet = ref(false);
 
-const startingBoardConfig = {
-  "A1": "White-Rook", "A2": "White-Pawn", "A7": "Black-Pawn", "A8": "Black-Rook",
-  "B1": "White-Knight", "B2": "White-Pawn", "B7": "Black-Pawn", "B8": "Black-Knight",
-  "C1": "White-Bishop", "C2": "White-Pawn", "C7": "Black-Pawn", "C8": "Black-Bishop",
-  "D1": "White-Queen", "D2": "White-Pawn", "D7": "Black-Pawn", "D8": "Black-Queen",
-  "E1": "White-King", "E2": "White-Pawn", "E7": "Black-Pawn", "E8": "Black-King",
-  "F1": "White-Bishop", "F2": "White-Pawn", "F7": "Black-Pawn", "F8": "Black-Bishop",
-  "G1": "White-Knight", "G2": "White-Pawn", "G7": "Black-Pawn", "G8": "Black-Knight",
-  "H1": "White-Rook", "H2": "White-Pawn", "H7": "Black-Pawn", "H8": "Black-Rook"
+const startingBoardConfig: BoardLayoutType = {
+  "A1": "White-Rook", "A2": "White-Pawn", "A3": "", "A4": "", "A5": "", "A6": "", "A7": "Black-Pawn", "A8": "Black-Rook",
+  "B1": "White-Knight", "B2": "White-Pawn", "B3": "", "B4": "", "B5": "", "B6": "", "B7": "Black-Pawn", "B8": "Black-Knight",
+  "C1": "White-Bishop", "C2": "White-Pawn", "C3": "", "C4": "", "C5": "", "C6": "", "C7": "Black-Pawn", "C8": "Black-Bishop",
+  "D1": "White-Queen", "D2": "White-Pawn", "D3": "", "D4": "", "D5": "", "D6": "", "D7": "Black-Pawn", "D8": "Black-Queen",
+  "E1": "White-King", "E2": "White-Pawn", "E3": "", "E4": "", "E5": "", "E6": "", "E7": "Black-Pawn", "E8": "Black-King",
+  "F1": "White-Bishop", "F2": "White-Pawn", "F3": "", "F4": "", "F5": "", "F6": "", "F7": "Black-Pawn", "F8": "Black-Bishop",
+  "G1": "White-Knight", "G2": "White-Pawn", "G3": "", "G4": "", "G5": "", "G6": "", "G7": "Black-Pawn", "G8": "Black-Knight",
+  "H1": "White-Rook", "H2": "White-Pawn", "H3": "", "H4": "", "H5": "", "H6": "", "H7": "Black-Pawn", "H8": "Black-Rook"
 }
+
+const checkersConfig: BoardConfigType =
+{
+  "name": "Checkers",
+  "config": {
+    "A1": "White-Pawn", "A2": "", "A3": "White-Pawn", "A4": "", "A5": "", "A6": "", "A7": "Black-Pawn", "A8": "",
+    "B1": "", "B2": "White-Pawn", "B3": "", "B4": "", "B5": "", "B6": "Black-Pawn", "B7": "", "B8": "Black-Pawn",
+    "C1": "White-Pawn", "C2": "", "C3": "White-Pawn", "C4": "", "C5": "", "C6": "", "C7": "Black-Pawn", "C8": "",
+    "D1": "", "D2": "White-Pawn", "D3": "", "D4": "", "D5": "", "D6": "Black-Pawn", "D7": "", "D8": "Black-Pawn",
+    "E1": "White-Pawn", "E2": "", "E3": "White-Pawn", "E4": "", "E5": "", "E6": "", "E7": "Black-Pawn", "E8": "",
+    "F1": "", "F2": "White-Pawn", "F3": "", "F4": "", "F5": "", "F6": "Black-Pawn", "F7": "", "F8": "Black-Pawn",
+    "G1": "White-Pawn", "G2": "", "G3": "White-Pawn", "G4": "", "G5": "", "G6": "", "G7": "Black-Pawn", "G8": "",
+    "H1": "", "H2": "White-Pawn", "H3": "", "H4": "", "H5": "", "H6": "", "H7": "", "H8": "Black-Pawn"
+  }
+};
+
 
 const blankBoardConfig = {
   "A1": "", "A2": "", "A3": "", "A4": "", "A5": "", "A6": "", "A7": "", "A8": "",
@@ -156,14 +168,43 @@ const blankBoardConfig = {
 }
 
 const selectedPiece = ref();
+type BoardLayoutType = {
+  "A1": string, "A2": string, "A3": string, "A4": string, "A5": string, "A6": string, "A7": string, "A8": string,
+  "B1": string, "B2": string, "B3": string, "B4": string, "B5": string, "B6": string, "B7": string, "B8": string,
+  "C1": string, "C2": string, "C3": string, "C4": string, "C5": string, "C6": string, "C7": string, "C8": string,
+  "D1": string, "D2": string, "D3": string, "D4": string, "D5": string, "D6": string, "D7": string, "D8": string,
+  "E1": string, "E2": string, "E3": string, "E4": string, "E5": string, "E6": string, "E7": string, "E8": string,
+  "F1": string, "F2": string, "F3": string, "F4": string, "F5": string, "F6": string, "F7": string, "F8": string,
+  "G1": string, "G2": string, "G3": string, "G4": string, "G5": string, "G6": string, "G7": string, "G8": string,
+  "H1": string, "H2": string, "H3": string, "H4": string, "H5": string, "H6": string, "H7": string, "H8": string
+};
 
-const savedConfigs: Ref<{
+type BoardConfigType = {
   name: string,
-  config: any // TODO: type this
-}[]> = ref([]);
+  config: BoardLayoutType,
+};
 
-const boardConfig = ref(startingBoardConfig);
+const savedConfigs: Ref<BoardConfigType[]> = ref([]);
+
+const boardConfig: Ref<BoardLayoutType> = ref(startingBoardConfig);
 const showGameMenu = ref(false);
+
+onMounted(() => {
+  LoadStartingConfigurations();
+});
+
+function LoadStartingConfigurations() {
+  if (savedConfigs.value.length === 0) {
+    savedConfigs.value.push(checkersConfig);
+    window.localStorage.savedBoardConfig = JSON.stringify(savedConfigs.value);
+  }
+}
+
+function goToAboutPage() {
+  router.replace({ path: '/about' })
+}
+
+
 
 function toggleStart() {
   showStart.value = !showStart.value;
@@ -201,6 +242,7 @@ if (window.localStorage.savedBoardConfig != null) {
 else {
   savedConfigs.value = [];
 }
+
 function saveCurrentConfig() {
   var name = prompt("What would you like to call this board Configuration?");
   if (!name) {
@@ -218,14 +260,13 @@ function saveCurrentConfig() {
   }
 
   makeBoardJson();
-
-  var configObject = {
+  var configObject: BoardConfigType = {
     "name": name,
     "config": boardConfig.value
   }
   savedBoards.push(configObject);
   window.localStorage.savedBoardConfig = JSON.stringify(savedBoards);
-  savedConfigs.value.push(configObject as any); // TODO: type this
+  savedConfigs.value.push(configObject);
 }
 
 function loadBoardConfig() {
@@ -235,6 +276,18 @@ function loadBoardConfig() {
   }
   if (confirm("Are you sure you want to load the following Board Configuration: " + config.name)) {
     populateJsonBoard(config.config);
+  }
+}
+
+function deleteBoardConfig() {
+  var config = LoadThisBoardConfig.value;
+  if (!config || !config.name) {
+    return;
+  }
+  if (confirm("Are you sure you want to delete the following Board Configuration: " + config.name)) {
+    const savedConfigs = JSON.parse(window.localStorage.savedBoardConfig) as [];
+    const newConfigs: BoardConfigType[] = savedConfigs.filter((c: BoardConfigType) => c.name !== config.name);
+    window.localStorage.savedBoardConfig = JSON.stringify(newConfigs);
   }
 }
 
@@ -357,14 +410,11 @@ function clearBoard() {
     document.getElementsByClassName('G' + i)[0].innerHTML = "";
     document.getElementsByClassName('H' + i)[0].innerHTML = "";
   }
-  boardConfig.value = {...blankBoardConfig};
+  boardConfig.value = { ...blankBoardConfig };
 }
 
 function makeBoardJson() {
-  if (!gameStarted.value) {
-    return;
-  }
-  boardConfig.value = {...blankBoardConfig};
+  boardConfig.value = { ...blankBoardConfig };
   for (var i = 1; i <= 8; i++) {
     for (var j = 0; j < 8; j++) {
       if (document.getElementsByClassName(files.value[j] + i)[0].innerHTML) {
