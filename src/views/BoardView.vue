@@ -285,9 +285,9 @@ function deleteBoardConfig() {
     return;
   }
   if (confirm("Are you sure you want to delete the following Board Configuration: " + config.name)) {
-    const savedConfigs = JSON.parse(window.localStorage.savedBoardConfig) as [];
-    const newConfigs: BoardConfigType[] = savedConfigs.filter((c: BoardConfigType) => c.name !== config.name);
-    window.localStorage.savedBoardConfig = JSON.stringify(newConfigs);
+    savedConfigs.value = JSON.parse(window.localStorage.savedBoardConfig) as [];
+    savedConfigs.value = savedConfigs.value.filter((c: BoardConfigType) => c.name !== config.name);
+    window.localStorage.savedBoardConfig = JSON.stringify(savedConfigs.value);
   }
 }
 
