@@ -209,7 +209,16 @@ function saveCurrentConfig() {
   var savedBoards = [];
   if (window.localStorage.savedBoardConfig != null) {
     savedBoards = JSON.parse(window.localStorage.savedBoardConfig);
+    for (const c of savedBoards) {
+      if (name === c.name) {
+        alert(`Name: ${name} alrady exists, try again with a unique name`);
+        return;
+      }
+    }
   }
+
+  makeBoardJson();
+
   var configObject = {
     "name": name,
     "config": boardConfig.value
@@ -291,7 +300,7 @@ function clearSelection() {
 }
 
 function move(oldLocation: any) {
-  newLocation.value.appendChild(selectedPiece.value)
+  newLocation.value.appendChild(selectedPiece.value);
   moveStack.value.push({
     'movedPiece': selectedPiece.value,
     'oldLocation': oldLocation,
@@ -348,14 +357,14 @@ function clearBoard() {
     document.getElementsByClassName('G' + i)[0].innerHTML = "";
     document.getElementsByClassName('H' + i)[0].innerHTML = "";
   }
-  boardConfig.value = blankBoardConfig;
+  boardConfig.value = {...blankBoardConfig};
 }
 
 function makeBoardJson() {
   if (!gameStarted.value) {
     return;
   }
-  boardConfig.value = blankBoardConfig;
+  boardConfig.value = {...blankBoardConfig};
   for (var i = 1; i <= 8; i++) {
     for (var j = 0; j < 8; j++) {
       if (document.getElementsByClassName(files.value[j] + i)[0].innerHTML) {
@@ -378,8 +387,8 @@ function populateJsonBoard(bc = boardConfig.value) {
 function resetBoard() {
   selectedPiece.value = null;
   resetPiecePallet();
-  makeBoardJson();
   clearSelection();
+  makeBoardJson();
 }
 
 </script>
